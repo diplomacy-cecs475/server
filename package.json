@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Diplomacy REST API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/Swipeful/api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest"
+  ],
+  "author": "Morgan Simon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Swipeful/api/issues"
+  },
+  "homepage": "https://gitlab.com/Swipeful/api#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "mysql": "^2.16.0"
+  }
+}
