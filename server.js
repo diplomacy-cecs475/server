@@ -28,7 +28,6 @@ io.on('connection', (socket) => {
   // when the client emits 'add user', this listens and executes
   socket.on('add user', (username) => {
     if (addedUser) return;
-
     // we store the username in the socket session for this client
     socket.username = username;
     ++nbUsers;
@@ -41,6 +40,7 @@ io.on('connection', (socket) => {
       username: socket.username,
       nbUsers: nbUsers
     });
+    console.log(`New user ${socket.id}: ${socket.username}`);
   });
 
   socket.on('disconnect', () => {
@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
         username: socket.username,
         nbUsers: nbUsers
       });
+      console.log(`Logout   ${socket.id}: ${socket.username}`);
     }
   });
 });
