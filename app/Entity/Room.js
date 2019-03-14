@@ -27,6 +27,14 @@ class Room {
   }
 
   /**
+   * Get the round number.
+   * @returns {number}
+   */
+  get roundNumber() {
+    return this._roundNumber;
+  }
+
+  /**
    * Get the password to enter in this room if the visibility is private.
    * @returns {string}
    */
