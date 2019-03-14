@@ -7,7 +7,7 @@ const path = require('path');
 const app = express();
 const server = http.Server(app);
 const io = socket(server);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
