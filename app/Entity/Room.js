@@ -101,6 +101,12 @@ class Room {
     this._users.push(user);
   }
 
+  removeUser(username) {
+    // TODO: Remove user by username.
+    // If the user is admin, we need to pass the role to someone else.
+    // If no user, throw an error.
+  }
+
   /**
    * Get the user admin.
    * @returns {User}
