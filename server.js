@@ -19,3 +19,38 @@ app.get('/', (req, res) => {
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));
+
+var nbUsers = 0;
+
+io.on('connection', (socket) => {
+  var addedUser = false;
+
+  // when the client emits 'add user', this listens and executes
+  socket.on('add user', (username) => {
+    if (addedUser) return;
+
+    // we store the username in the socket session for this client
+    socket.username = username;
+    ++nbUsers;
+    addedUser = true;
+    socket.emit('login', {
+      nbUsers: nbUsers
+    });
+    // echo globally (all clients) that a person has connected
+    socket.broadcast.emit('user joined', {
+      username: socket.username,
+      nbUsers: nbUsers
+    });
+  });
+
+  socket.on('disconnect', () => {
+    if (addedUser) {
+      --nbUsers;
+      // echo globally that this client has left
+      socket.broadcast.emit('user left', {
+        username: socket.username,
+        nbUsers: nbUsers
+      });
+    }
+  });
+});
