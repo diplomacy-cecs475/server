@@ -19,6 +19,15 @@ class Room {
     this._roundNumber = 0;
   }
 
+  destructor() {
+    delete this._tokenId;
+    delete this._users;
+    delete this._map;
+    delete this._visibility;
+    delete this._password;
+    delete this._roundNumber;
+  }
+
   /**
    * Add a round number.
    */
