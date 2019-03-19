@@ -77,8 +77,8 @@ class Room {
    * @returns {string}
    */
   static generateTokenId() {
-    // TODO: return a random token.
-    return "AAAAA";
+    //generate a random 5 char length string token using numbers 0-9 and letters a-z
+    return Math.random().toString(36).substr(0, 5);
   }
 
   /**
