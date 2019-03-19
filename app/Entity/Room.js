@@ -1,22 +1,18 @@
 const MAX_USER_PER_ROOM = 7;
 const LENGTH_TOKEN = 5;
 
-const visibilityRoomEnum = {
-  PUBLIC: 1,
-  PRIVATE: 2,
-};
-
 /**
  * Room object.
  */
 class Room {
-  constructor() {
+  constructor(name) {
     this._tokenId = Room.generateTokenId();
     this._users = [];
     this._map = [];
-    this._visibility = visibilityRoomEnum.PUBLIC;
+    this._visibility = false;
     this._password = null;
     this._roundNumber = 0;
+    this._name = name;
   }
 
   /**
@@ -32,6 +28,22 @@ class Room {
    */
   get roundNumber() {
     return this._roundNumber;
+  }
+
+  /**
+   * Get the name of the room.
+   * @returns {string}
+   */
+  get name() {
+    return this._name;
+  }
+
+  /**
+   * Set the name.
+   * @param name
+   */
+  set name(name) {
+    this._name = name;
   }
 
   /**
@@ -52,7 +64,7 @@ class Room {
 
   /**
    * Get the visibility, public or private room.
-   * @returns {number|*}
+   * @returns {boolean}
    */
   get visibility() {
     return this._visibility;
@@ -64,12 +76,8 @@ class Room {
    * @param visibility
    */
   set visibility(visibility) {
-    if (visibility in visibilityRoomEnum) {
-      this._visibility = visibility;
-      console.log("Visibility is set to " + visibility + ".");
-    } else {
-      throw "Visibility does not exist.";
-    }
+    this._visibility = visibility;
+    console.log("Visibility is set to " + visibility + ".");
   }
 
   /**
@@ -103,7 +111,7 @@ class Room {
    * @param user the user.
    */
   addUser(user) {
-    if (this._users.count() >= MAX_USER_PER_ROOM) {
+    if (this._users.length >= MAX_USER_PER_ROOM) {
       throw "Too many user in this room.";
     }
     this._users.push(user);
@@ -131,7 +139,10 @@ class Room {
    */
   getAdminUser() {
     return this._users.find(function (user) {
-      return user === roleUserEnum.ADMIN;
+      return user.admin === true;
     });
   }
 }
+
+
+module.exports = Room;

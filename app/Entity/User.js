@@ -1,19 +1,10 @@
 /**
- * A user can be a simple player or an admin.
- * @type {{PLAYER: number, ADMIN: number}}
- */
-const roleUserEnum = {
-  PLAYER: 1,
-  ADMIN: 2,
-};
-
-/**
  * User object.
  */
 class User {
     constructor(userName) {
         this._userName = userName;
-        this._role = roleUserEnum.PLAYER;
+        this._admin = false;
     }
 
     /**
@@ -34,24 +25,19 @@ class User {
     }
 
     /**
-     * Get the role.
-     * @returns {number|*}
+     * Get true if the user is admin.
+     * @returns {boolean}
      */
-    get role() {
-        return this._role;
+    get admin() {
+        return this._admin;
     }
 
     /**
      * Set the role.
-     * @param role
+     * @param pAdmin
      */
-    set role(role) {
-        if (role === roleUserEnum.PLAYER || role === roleUserEnum.ADMIN) {
-            this._role = role;
-            console.log("Role " + role + " defined to the user.");
-        } else {
-            throw "Role does not exist.";
-        }
+    set admin(pAdmin) {
+        this._admin = pAdmin;
     }
 
     /**
@@ -71,3 +57,5 @@ class User {
         console.log("User name set to " + userName);
     }
 }
+
+module.exports = User;
