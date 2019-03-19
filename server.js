@@ -46,13 +46,13 @@ io.on('connection', (socket) => {
     console.log(roomList);
   });
 
-  socket.on('create room', (name, visibility, password) => {
+  socket.on('create room', (name, publicVisibility, password) => {
     if (user) {
       user.admin = true;
 
       room = new Room(name);
       room.addUser(user);
-      room.visibility = visibility;
+      room.public = publicVisibility;
       room.password = password;
 
       roomList.push(room);

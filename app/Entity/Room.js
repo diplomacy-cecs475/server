@@ -9,7 +9,7 @@ class Room {
     this._tokenId = Room.generateTokenId();
     this._users = [];
     this._map = [];
-    this._visibility = false;
+    this._public = true;
     this._password = null;
     this._roundNumber = 0;
     this._name = name;
@@ -66,18 +66,17 @@ class Room {
    * Get the visibility, public or private room.
    * @returns {boolean}
    */
-  get visibility() {
-    return this._visibility;
+  get public() {
+    return this._public;
   }
 
   /**
    * Set the visibility.
    * Throw if the visibility does not exists.
-   * @param visibility
+   * @param pPublic true if the room will be public.
    */
-  set visibility(visibility) {
-    this._visibility = visibility;
-    console.log("Visibility is set to " + visibility + ".");
+  set public(pPublic) {
+    this._public = pPublic;
   }
 
   /**
@@ -89,12 +88,11 @@ class Room {
   }
 
   /**
-   * Generates a random token of size LENGTH_TOKEN.
+   * Generates a random token of size LENGTH_TOKEN using numbers 0-9 and letters a-z.
    * @returns {string}
    */
   static generateTokenId() {
-    //generate a random 5 char length string token using numbers 0-9 and letters a-z
-    return Math.random().toString(36).substr(0, 5);
+    return Math.random().toString(36).substr(2, LENGTH_TOKEN).toUpperCase();
   }
 
   /**
