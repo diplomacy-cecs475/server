@@ -7,6 +7,7 @@ module.exports = (socket, globalData) => {
     if (!socket.user) {
       ++globalData.nbUsers;
       socket.user = new User(username, socket);
+      socket.emit('add user:response', socket.user.toResult());
       console.log(`New user ${socket.id}: ${socket.user.userName}`);
     }
   });

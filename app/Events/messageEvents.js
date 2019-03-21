@@ -7,7 +7,7 @@ module.exports = (socket, globalData) => {
         return user.username === username;
       });
       if (userTarget) {
-        userTarget.socket.emit({cmd: 'msgPriv', res: {userFrom: socket.user.userName, msg: msg}});
+        userTarget.socket.emit('msgPriv', {userFrom: socket.user.userName, msg: msg});
       }
     }
   });
@@ -17,7 +17,7 @@ module.exports = (socket, globalData) => {
     if (socket.user) {
       socket.room.users.forEach(function(user) {
         if (user !== socket.user) {
-          user.socket.emit({cmd: 'msgGlobal', res: {userFrom: socket.user.userName, msg: msg}});
+          user.socket.emit('msgGlobal', {userFrom: socket.user.userName, msg: msg});
         }
       });
     }

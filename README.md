@@ -18,6 +18,8 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 
 - Username: string
 
+socket.emit("add user:response", socket.user.toResult());
+
 **disconnect**
 
 **create room ‘room name’ ‘public’ ‘password’**
@@ -26,7 +28,7 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 - Public: true if anyone can join the room.
 - Password: string if public = false or null
 
-Emit : {cmd: 'joinRoom', res: socket.room.toResult()}
+socket.emit("create room:response", socket.room.toResult());
 
 
 **join room ‘token’ ‘password’**
@@ -34,24 +36,24 @@ Emit : {cmd: 'joinRoom', res: socket.room.toResult()}
 - Token: String must be the exact unique token of the room.
 - Password: If the room is private, string. Or null if the room is public.
 
-Emit: {cmd: 'joinRoom', res: socket.room.toResult()}
+socket.emit("join room:response", socket.room.toResult());
 
 **list room**
 
-Emit: {cmd: 'listRoom', res: roomList}
+socket.emit('list room:response', roomList);
 
 **msg to ‘username’ ‘msg’**
 
 - Username: String must be the user in the same room.
 - Msg: String contains the message to send.
 
-Emit to the user: {cmd: 'msgPriv', res: {userFrom: socket.user.userName, msg: msg}}
+userTarget.socket.emit('msgPriv', {userFrom: socket.user.userName, msg: msg});
 
 **msg global ‘msg’**
 
 - Msg: String contains the message to send.
 
-Emit to the user: {cmd: 'msgGlobal', res: {userFrom: socket.user.userName, msg: msg}}
+user.socket.emit('msgGlobal', {userFrom: socket.user.userName, msg: msg});
 
 ## Authors
 - Frederic Oddou

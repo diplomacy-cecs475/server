@@ -13,7 +13,7 @@ module.exports = (socket, globalData) => {
       socket.room.password = password;
 
       globalData.roomList.push(socket.room);
-      socket.emit({cmd: 'joinRoom', res: socket.room.toResult()});
+      socket.emit('create room:response', socket.room.toResult());
     }
     console.log("User " + socket.user.userName + " created the room " + socket.room.name + " and set public to " + publicVisibility + " with token " + socket.room.tokenId + ".");
   });
@@ -28,7 +28,7 @@ module.exports = (socket, globalData) => {
         try {
           room.addUser(socket.user);
           socket.room = room;
-          socket.emit({cmd: 'joinRoom', res: socket.room.toResult()});
+          socket.emit('join room:response', socket.room.toResult());
           console.log("User " + socket.user.userName + " joined the room " + socket.room.name + ".");
         }
         catch (e) {
@@ -48,6 +48,6 @@ module.exports = (socket, globalData) => {
     globalData.roomList.forEach(function (room) {
       roomList.push(room.toResult());
     });
-    socket.emit({cmd: 'listRoom', res: roomList});
+    socket.emit('list room:response', roomList);
   });
 };
