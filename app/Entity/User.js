@@ -2,26 +2,26 @@
  * User object.
  */
 class User {
-    constructor(userName) {
+    constructor(userName, socket) {
         this._userName = userName;
         this._admin = false;
+        this._socket = socket;
     }
 
     /**
      * Get the socket id.
-     * @returns {string}
+     * @returns {socket}
      */
-    get socketId() {
-        return this._socketId;
+    get socket() {
+        return this._socket;
     }
 
     /**
-     * Set the socket id to the user.
-     * @param socketId the socket id.
+     * Set the socket to the user.
+     * @param socket the socket id.
      */
-    set socketId(socketId) {
-        this._socketId = socketId;
-        console.log("New Socket id is: " + value);
+    set socket(socket) {
+        this._socket = socket;
     }
 
     /**
@@ -55,6 +55,13 @@ class User {
     set userName(userName) {
         this._userName = userName;
         console.log("User name set to " + userName);
+    }
+
+    toResult() {
+      return {
+        username: this._userName,
+        admin: this._admin
+      };
     }
 }
 

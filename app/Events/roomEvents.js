@@ -13,7 +13,41 @@ module.exports = (socket, globalData) => {
       socket.room.password = password;
 
       globalData.roomList.push(socket.room);
+      socket.emit({cmd: 'joinRoom', res: socket.room.toResult()});
     }
-    console.log(globalData.roomList);
+    console.log("User " + socket.user.userName + " created the room " + socket.room.name + " and set public to " + publicVisibility + " with token " + socket.room.tokenId + ".");
   });
-}
+
+  // Join Room if the user has been created and he is not already in a room.
+  socket.on('join room', (token, password) => {
+    if (socket.user && !socket.room) {
+      let room = globalData.roomList.find((roomFind) => {
+        return roomFind.tokenId === token;
+      });
+      if (room && (room.public || room.password === password) && room.started === false) {
+        try {
+          room.addUser(socket.user);
+          socket.room = room;
+          socket.emit({cmd: 'joinRoom', res: socket.room.toResult()});
+          console.log("User " + socket.user.userName + " joined the room " + socket.room.name + ".");
+        }
+        catch (e) {
+          socket.emit(e);
+          console.log(e);
+        }
+      } else if (!room) {
+        console.log("Room " + token + " does not exists");
+        console.log(globalData.roomList);
+      }
+    }
+  });
+
+  // Create Room
+  socket.on('list room', () => {
+    let roomList = [];
+    globalData.roomList.forEach(function (room) {
+      roomList.push(room.toResult());
+    });
+    socket.emit({cmd: 'listRoom', res: roomList});
+  });
+};

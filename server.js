@@ -26,7 +26,6 @@ var globalData = {
 };
 
 io.on('connection', (socket) => {
-
   // Socket events
   require('./app/sockets')(socket, globalData);
 });

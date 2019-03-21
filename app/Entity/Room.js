@@ -13,6 +13,15 @@ class Room {
     this._password = null;
     this._roundNumber = 0;
     this._name = name;
+    this._started = false;
+  }
+
+  get started() {
+    return this._started;
+  }
+
+  start() {
+    this._started = true;
   }
 
   /**
@@ -139,6 +148,21 @@ class Room {
     return this._users.find(function (user) {
       return user.admin === true;
     });
+  }
+
+  toResult() {
+    let users = [];
+    this._users.forEach(function (user) {
+      users.push(user.toResult())
+    });
+
+    return {
+      name: this._name,
+      tokenId: this._tokenId,
+      roundNumber: this._roundNumber,
+      started: this._started,
+      users: users,
+    };
   }
 }
 
