@@ -12,10 +12,10 @@ const port = process.env.PORT || 4000;
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/', (req, res) => {
-  res.status(200).send('Server root');
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 server.listen(port, () => console.log(`Server running on port ${port}`));

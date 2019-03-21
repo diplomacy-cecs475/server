@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "diplomacy-server",
   "version": "1.0.0",
-  "description": "Diplomacy REST API",
+  "description": "Diplomacy Server",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/Swipeful/api.git"
+    "url": "git+ssh://git@github.com:diplomacy-cecs475/server.git"
   },
   "keywords": [
     "nodejs",
@@ -19,9 +19,9 @@
   "author": "Morgan Simon",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/Swipeful/api/issues"
+    "url": "https://github.com/diplomacy-cecs475/server/issues"
   },
-  "homepage": "https://gitlab.com/Swipeful/api#readme",
+  "homepage": "https://github.com/diplomacy-cecs475/server/blob/master/README.md",
   "dependencies": {
     "express": "^4.16.4",
     "morgan": "^1.9.1",
