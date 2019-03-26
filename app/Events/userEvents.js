@@ -5,10 +5,33 @@ module.exports = (socket, globalData) => {
   // Add user to the list with an user name.
   socket.on('add user', (username) => {
     if (!socket.user) {
-      ++globalData.nbUsers;
-      socket.user = new User(username, socket);
-      socket.emit('add user:response', socket.user.toResult());
-      console.log(`New user ${socket.id}: ${socket.user.userName}`);
+      let userByUsername = globalData.listUsers.find(function (user) {
+        return user.username === username;
+      });
+      if (!userByUsername) {
+        ++globalData.nbUsers;
+        socket.user = new User(username, socket);
+        socket.emit('add user:response', {success: true, response: socket.user.toResult()});
+        console.log(`New user ${socket.id}: ${socket.user.userName}.`);
+        globalData.listUsers.push(socket.user);
+      } else {
+        socket.emit('add user:response', {success: false, response: 'Username already exists.'});
+      }
+    }
+  });
+
+  // Reconnect user if the socket has disconnected.
+  socket.on('reconnect user', (tokenId) => {
+    let userByToken = globalData.listUsers.find(function (user) {
+      return user.tokenId === tokenId;
+    });
+    if (userByToken) {
+      userByToken.socket = socket;
+      socket.user = userByToken;
+      socket.emit('reconnect user:response', {success: true, response: socket.user.toResult()});
+      console.log(`User ${socket.id}: ${socket.user.userName} reconnected.`);
+    } else {
+      socket.emit('reconnect user:response', {success: false, response: 'Token does not exists.'});
     }
   });
 
