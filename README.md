@@ -55,6 +55,20 @@ userTarget.socket.emit('msgPriv', {userFrom: socket.user.userName, msg: msg});
 
 user.socket.emit('msgGlobal', {userFrom: socket.user.userName, msg: msg});
 
+**kick user 'username'**
+
+- Username: String must be the user in the same room.
+
+userTarget.socket.emit('kicked');
+socket.emit('kick user:response', socket.room.toResult());
+
+**delegate role 'username'**
+
+- Username: String must be the user in the same room.
+
+userTarget.socket.emit('delegated', socket.room.toResult());
+socket.emit('delegate role:response', socket.room.toResult());
+
 ## Authors
 - Frederic Oddou
 - Morgan Simon

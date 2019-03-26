@@ -12,6 +12,36 @@ module.exports = (socket, globalData) => {
     }
   });
 
+  // If admin, can kick other player.
+  socket.on('kick user', (username) => {
+    if (socket.user && socket.room && socket.user.admin) {
+      let userTarget = socket.room.users.find(function (user) {
+        return user.username === username;
+      });
+      if (userTarget) {
+        userTarget.socket.emit('kicked');
+        userTarget.socket.room = null;
+        socket.room.removeUser(username);
+        socket.emit('kick user:response', socket.room.toResult());
+      }
+    }
+  });
+
+  // If admin, can delegate the role to another player.
+  socket.on('delegate role', (username) => {
+    if (socket.user && socket.room && socket.user.admin) {
+      let userTarget = socket.room.users.find(function (user) {
+        return user.username === username;
+      });
+      if (userTarget) {
+        userTarget.socket.emit('delegated', socket.room.toResult());
+        userTarget.socket.user.admin = true;
+        socket.user.admin = false;
+        socket.emit('delegate role:response', socket.room.toResult());
+      }
+    }
+  });
+
   // Client disconnect
   socket.on('disconnect', () => {
     if (socket.user) {
