@@ -17,6 +17,8 @@ module.exports = (socket, globalData) => {
       } else {
         socket.emit('add user:response', {success: false, response: 'Username already exists.'});
       }
+    } else {
+      socket.emit('add user:response', {success: true, response: socket.user.toResult()});
     }
   });
 
@@ -45,8 +47,12 @@ module.exports = (socket, globalData) => {
         userTarget.socket.emit('kicked');
         userTarget.socket.room = null;
         socket.room.removeUser(username);
-        socket.emit('kick user:response', socket.room.toResult());
+        socket.emit('kick user:response', {success: true, response: socket.room.toResult()});
+      } else {
+        socket.emit('kick user:response', {success: false, response: 'No user found.'});
       }
+    } else {
+      socket.emit('kick user:response', {success: false, response: 'You do not have enough right.'});
     }
   });
 
@@ -60,8 +66,12 @@ module.exports = (socket, globalData) => {
         userTarget.socket.emit('delegated', socket.room.toResult());
         userTarget.socket.user.admin = true;
         socket.user.admin = false;
-        socket.emit('delegate role:response', socket.room.toResult());
+        socket.emit('delegate role:response', {success: true, response: socket.room.toResult()});
+      } else {
+        socket.emit('delegate user:response', {success: false, response: 'No user found.'});
       }
+    } else {
+      socket.emit('delegate user:response', {success: false, response: 'You do not have enough right.'});
     }
   });
 
