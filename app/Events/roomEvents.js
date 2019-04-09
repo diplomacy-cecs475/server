@@ -12,7 +12,7 @@ module.exports = (socket, globalData) => {
         socket.room.addUser(socket.user);
         socket.room.public = publicVisibility;
         socket.room.password = password;
-        socket.room.time = time;
+        socket.room.timer = time;
         socket.room.nbUsersMax = nbUsersMax;
 
         globalData.roomList.push(socket.room);
