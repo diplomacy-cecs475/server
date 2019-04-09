@@ -61,4 +61,17 @@ module.exports = (socket, globalData) => {
     });
     socket.emit('list room:response', {success: true, response: roomList});
   });
+
+  // Get special Room
+  socket.on('get room', (tokenId) => {
+    let room = globalData.roomList.find((roomFind) => {
+      return roomFind.tokenId === tokenId;
+    });
+    if (room === null) {
+      socket.emit('get room:response', {success: false, response: 'Room not found.'});
+    } else {
+      socket.emit('get room:response', {success: true, response: room.toResult()});
+    }
+  });
+
 };

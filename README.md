@@ -18,8 +18,8 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 
 - Username: string
 
-- socket.emit('add user:response', {success: true, response: socket.user.toResult()});
-- socket.emit('add user:response', {success: false, response: 'Username already exists.'});
+- `socket.emit('add user:response', {success: true, response: socket.user.toResult()});`
+- `socket.emit('add user:response', {success: false, response: 'Username already exists.'});`
 
 **reconnect user 'tokenId'**
 
@@ -71,6 +71,14 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 **list room**
 
 - socket.emit('list room:response', {success: true, response: roomList});
+
+
+**get room 'tokenId'**
+
+- TokenId: String must be the exact unique token of the room.
+
+- socket.emit('get room:response', {success: false, response: 'Room not found.'});
+- socket.emit('get room:response', {success: true, response: room.toResult()});
 
 **msg to ‘username’ ‘msg’**
 
