@@ -18,32 +18,40 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 
 - Username: string
 
-- `socket.emit('add user:response', {success: true, response: socket.user.toResult()});`
-- `socket.emit('add user:response', {success: false, response: 'Username already exists.'});`
+```js
+socket.emit('add user:response', {success: true, response: socket.user.toResult()});
+socket.emit('add user:response', {success: false, response: 'Username already exists.'});
+```
 
 **reconnect user 'tokenId'**
 
 - TokenId: string
 
-- socket.emit('reconnect user:response', {success: true, response: socket.user.toResult()});
-- socket.emit('reconnect user:response', {success: false, response: 'Token does not exists.'});
+```js
+socket.emit('reconnect user:response', {success: true, response: socket.user.toResult()});
+socket.emit('reconnect user:response', {success: false, response: 'Token does not exists.'});
+```
 
 **kick user 'username'**
 
 - Username: String must be the user in the same room.
 
-- userTarget.socket.emit('kicked');
-- socket.emit('kick user:response', {success: true, response: socket.room.toResult()});
-- socket.emit('kick user:response', {success: false, response: 'No user found.'});
-- socket.emit('kick user:response', {success: false, response: 'You do not have enough right.'});
+```js
+userTarget.socket.emit('kicked');
+socket.emit('kick user:response', {success: true, response: socket.room.toResult()});
+socket.emit('kick user:response', {success: false, response: 'No user found.'});
+socket.emit('kick user:response', {success: false, response: 'You do not have enough right.'});
+```
 
 **delegate role 'username'**
 
 - Username: String must be the user in the same room.
 
-- socket.emit('delegate role:response', {success: true, response: socket.room.toResult()});
-- socket.emit('delegate user:response', {success: false, response: 'No user found.'});
-- socket.emit('delegate user:response', {success: false, response: 'You do not have enough right.'});
+```js
+socket.emit('delegate role:response', {success: true, response: socket.room.toResult()});
+socket.emit('delegate user:response', {success: false, response: 'No user found.'});
+socket.emit('delegate user:response', {success: false, response: 'You do not have enough right.'});
+```
 
 **disconnect**
 
@@ -55,18 +63,22 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 - Time: integer time for each round.
 - NbUsersMax: integer number of users max.
 
-- socket.emit('create room:response', {success: true, response: socket.room.toResult()});
-- socket.emit('create room:response', {success: false, response: 'You are already in a room.'});
-- socket.emit('create room:response', {success: false, response: 'You are not logged in.'});
+```js
+socket.emit('create room:response', {success: true, response: socket.room.toResult()});
+socket.emit('create room:response', {success: false, response: 'You are already in a room.'});
+socket.emit('create room:response', {success: false, response: 'You are not logged in.'});
+```
 
 **join room ‘token’ ‘password’**
 
 - Token: String must be the exact unique token of the room.
 - Password: If the room is private, string. Or null if the room is public.
 
-- socket.emit('join room:response', {success: true, response: socket.room.toResult()});
-- socket.emit('join room:response', {success: false, response: 'Room ' + token + ' does not exists.'});
-- socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
+```js
+socket.emit('join room:response', {success: true, response: socket.room.toResult()});
+socket.emit('join room:response', {success: false, response: 'Room ' + token + ' does not exists.'});
+socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
+```
 
 **list room**
 
@@ -77,21 +89,27 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 
 - TokenId: String must be the exact unique token of the room.
 
-- socket.emit('get room:response', {success: false, response: 'Room not found.'});
-- socket.emit('get room:response', {success: true, response: room.toResult()});
+```js
+socket.emit('get room:response', {success: false, response: 'Room not found.'});
+socket.emit('get room:response', {success: true, response: room.toResult()});
+```
 
 **msg to ‘username’ ‘msg’**
 
 - Username: String must be the user in the same room.
 - Msg: String contains the message to send.
 
+```js
 userTarget.socket.emit('msgPriv', {userFrom: socket.user.userName, msg: msg});
+```
 
 **msg global ‘msg’**
 
 - Msg: String contains the message to send.
 
+```js
 user.socket.emit('msgGlobal', {userFrom: socket.user.userName, msg: msg});
+```
 
 ## Authors
 - Frederic Oddou
