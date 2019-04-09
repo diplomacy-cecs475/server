@@ -8,11 +8,13 @@ class Room {
   constructor(name) {
     this._tokenId = Room.generateTokenId();
     this._users = [];
+    this._nbUsersMax = MAX_USER_PER_ROOM;
     this._map = [];
     this._public = true;
     this._password = null;
     this._roundNumber = 0;
     this._name = name;
+    this._timer = 15;
     this._started = false;
   }
 
@@ -81,11 +83,42 @@ class Room {
 
   /**
    * Set the visibility.
-   * Throw if the visibility does not exists.
    * @param pPublic true if the room will be public.
    */
   set public(pPublic) {
     this._public = pPublic;
+  }
+
+  /**
+   * Get the number of users max to the room.
+   * @returns {int}
+   */
+  get nbUsersMax() {
+    return this._nbUsersMax;
+  }
+
+  /**
+   * Set the number of users max.
+   * @param nbUsersMax integer.
+   */
+  set nbUsersMax(nbUsersMax) {
+    this._nbUsersMax = nbUsersMax;
+  }
+
+  /**
+   * Get the time of each round.
+   * @returns {int}
+   */
+  get timer() {
+    return this._timer;
+  }
+
+  /**
+   * Set the time for each round.
+   * @param time integer.
+   */
+  set timer(time) {
+    this._timer = time;
   }
 
   /**
@@ -118,7 +151,7 @@ class Room {
    * @param user the user.
    */
   addUser(user) {
-    if (this._users.length >= MAX_USER_PER_ROOM) {
+    if (this._users.length >= this._nbUsersMax) {
       throw "Too many user in this room.";
     }
     this._users.push(user);
@@ -161,6 +194,10 @@ class Room {
       tokenId: this._tokenId,
       roundNumber: this._roundNumber,
       started: this._started,
+      nbUsersMax: this._nbUsersMax,
+      admin: this.getAdminUser().toResult(),
+      public: this._public,
+      timer: this._timer,
       users: users,
     };
   }

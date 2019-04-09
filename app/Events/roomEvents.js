@@ -3,7 +3,7 @@ const Room = require('../Entity/Room');
 module.exports = (socket, globalData) => {
 
   // Create Room
-  socket.on('create room', (name, publicVisibility, password) => {
+  socket.on('create room', (name, publicVisibility, password, time, nbUsersMax) => {
     if (socket.user) {
       if (!socket.room) {
         socket.user.admin = true;
@@ -12,6 +12,8 @@ module.exports = (socket, globalData) => {
         socket.room.addUser(socket.user);
         socket.room.public = publicVisibility;
         socket.room.password = password;
+        socket.room.time = time;
+        socket.room.nbUsersMax = nbUsersMax;
 
         globalData.roomList.push(socket.room);
         socket.emit('create room:response', {success: true, response: socket.room.toResult()});

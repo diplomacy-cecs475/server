@@ -47,11 +47,13 @@ docker run -p 4000:4000 -d diplomacy-server:latest
 
 **disconnect**
 
-**create room ‘room name’ ‘public’ ‘password’**
+**create room ‘room name’ ‘public’ ‘password’ 'time' 'nbUsersMax'**
 
 - Room name: string
 - Public: true if anyone can join the room.
 - Password: string if public = false or null
+- Time: integer time for each round.
+- NbUsersMax: integer number of users max.
 
 - socket.emit('create room:response', {success: true, response: socket.room.toResult()});
 - socket.emit('create room:response', {success: false, response: 'You are already in a room.'});

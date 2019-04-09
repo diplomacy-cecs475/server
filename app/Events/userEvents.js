@@ -77,6 +77,7 @@ module.exports = (socket, globalData) => {
 
   // Client disconnect
   socket.on('disconnect', () => {
+    /*
     if (socket.user) {
       if (socket.room) {
         // If the room has only one user, we are removing the room.
@@ -92,5 +93,6 @@ module.exports = (socket, globalData) => {
       --globalData.nbUsers;
       console.log(`Logout   ${socket.id}: ${socket.user.userName}`);
     }
+  */
   });
 };
