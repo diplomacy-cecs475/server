@@ -1,3 +1,4 @@
+require('@google-cloud/debug-agent').start();
 const express = require('express');
 const http = require('http');
 const socket = require('socket.io');
