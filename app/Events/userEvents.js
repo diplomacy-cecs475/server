@@ -28,8 +28,9 @@ module.exports = (socket, globalData) => {
       return user.tokenId === req.tokenId;
     });
     if (userByToken) {
-      userByToken.socket = socket;
+      socket.room = userByToken.socket.room;
       socket.user = userByToken;
+      userByToken.socket = socket;
       socket.emit('reconnect user:response', {success: true, response: socket.user.toResult()});
       console.log(`User ${socket.id}: ${socket.user.userName} reconnected.`);
     } else {
