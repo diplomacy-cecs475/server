@@ -50,6 +50,8 @@ module.exports = (socket, globalData) => {
       } else {
         socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
       }
+    } else {
+      socket.emit('join room:response', {success: false, response: 'You are already in a room or not logged in.'});
     }
   });
 
@@ -60,6 +62,18 @@ module.exports = (socket, globalData) => {
       roomList.push(room.toResult());
     });
     socket.emit('list room:response', {success: true, response: roomList});
+  });
+
+  // Leave room
+  socket.on('leave room', () => {
+    if (socket.user && socket.room) {
+      socket.room.removeUser(socket.user);
+      socket.room = null;
+      socket.user.admin = false;
+      socket.emit('leave room:response', {success: true, response: "You were removed."});
+    } else {
+      socket.emit('leave room:response', {success: false, response: "You are not logged in or not in a room."});
+    }
   });
 
   // Get special Room

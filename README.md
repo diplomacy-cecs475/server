@@ -80,9 +80,18 @@ socket.emit('join room:response', {success: false, response: 'Room ' + token + '
 socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
 ```
 
+**leave room**
+
+```js
+socket.emit('leave room:response', {success: true, response: "You were removed."});
+socket.emit('leave room:response', {success: false, response: "You are not logged in or not in a room."});
+```
+
 **list room**
 
-- socket.emit('list room:response', {success: true, response: roomList});
+```js
+socket.emit('list room:response', {success: true, response: roomList});
+```
 
 
 **get room 'tokenId'**

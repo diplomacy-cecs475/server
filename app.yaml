@@ -1,3 +1,2 @@
 runtime: nodejs10
-api_version: 1
 service: statecraft-server

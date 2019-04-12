@@ -157,19 +157,13 @@ class Room {
     this._users.push(user);
   }
 
-  removeUser(username) {
-    // TODO: Remove user by username.
-    // If the user is admin, we need to pass the role to someone else.
-    // If no user, throw an error.
-    if (username === roleUserEnum.ADMIN) {
-      this._users.splice(list.indexOf(username), 1);
-      this._users[0] = roleUserEnum.ADMIN;
-    }
-    else if (!this._users.includes(username)) {
-      throw "User does not exist";
-    }
-    else {
-      this._users.splice(list.indexOf(username), 1);
+  removeUser(user) {
+    let userIdx = this._users.findIndex((obj) => {
+      return obj.userName === user;
+    });
+
+    if (userIdx !== -1) {
+      this._users.splice(userIdx, 1);
     }
   }
 
