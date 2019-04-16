@@ -154,6 +154,9 @@ class Room {
     if (this._users.length >= this._nbUsersMax) {
       throw "Too many user in this room.";
     }
+    if (this.nameChecker(user)) {
+      throw "Username is already taken";
+    }
     this._users.push(user);
   }
 
@@ -165,6 +168,9 @@ class Room {
     if (userIdx !== -1) {
       this._users.splice(userIdx, 1);
     }
+  }
+  nameChecker(user) {
+    return this._users.includes(user);
   }
 
   /**
@@ -182,6 +188,7 @@ class Room {
     this._users.forEach(function (user) {
       users.push(user.toResult())
     });
+
 
     return {
       name: this._name,
