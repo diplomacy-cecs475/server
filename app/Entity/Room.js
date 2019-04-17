@@ -170,7 +170,10 @@ class Room {
     }
   }
   nameChecker(user) {
-    return this._users.includes(user);
+    var checker = false;
+    for (var i = 0; i < this._users.length; i++) {
+      checker = (user._userName == this._users[i]._userName);
+    return checker;
   }
 
   /**
