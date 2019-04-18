@@ -1,4 +1,5 @@
 const User = require('../Entity/User');
+let utils = require('../Tools/utils');
 
 module.exports = (socket, globalData) => {
 
@@ -11,14 +12,16 @@ module.exports = (socket, globalData) => {
       if (!userByUsername) {
         ++globalData.nbUsers;
         socket.user = new User(req.username, socket);
-        socket.emit('add user:response', {success: true, response: socket.user.toResult()});
-        console.log(`New user ${socket.id}: ${socket.user.userName}.`);
+        socket.emit('add user:response', {code: req.code, success: true, response: socket.user.toResult()});
+        console.log(`[Add User] New user ${socket.id}: ${socket.user.userName}.`);
         globalData.listUsers.push(socket.user);
       } else {
-        socket.emit('add user:response', {success: false, response: 'Username already exists.'});
+        socket.emit('add user:response', {code: req.code, success: false, response: 'Username already exists.'});
+        console.error("[Add User] Socket " + socket.id + " wanted to user the username " + req.username + " but it is already existing.");
       }
     } else {
-      socket.emit('add user:response', {success: true, response: socket.user.toResult()});
+      socket.emit('add user:response', {code: req.code, success: true, response: socket.user.toResult()});
+      console.log("[Add User] Socket " + socket.id + " used this command but he is already logged in as " + socket.user.userName + ".");
     }
   });
 
@@ -31,10 +34,11 @@ module.exports = (socket, globalData) => {
       socket.room = userByToken.socket.room;
       socket.user = userByToken;
       userByToken.socket = socket;
-      socket.emit('reconnect user:response', {success: true, response: socket.user.toResult()});
-      console.log(`User ${socket.id}: ${socket.user.userName} reconnected.`);
+      socket.emit('reconnect user:response', {code: req.code, success: true, response: socket.user.toResult()});
+      console.log(`[Reconnect user] User ${socket.id}: ${socket.user.userName} reconnected.`);
     } else {
-      socket.emit('reconnect user:response', {success: false, response: 'Token does not exists.'});
+      socket.emit('reconnect user:response', {code: req.code, success: false, response: 'Token does not exists.'});
+      console.error("[Reconnect user] User " + socket.id + " want to reconnect with token " + req.tokenId  + " but it did not exists.");
     }
   });
 
@@ -48,12 +52,16 @@ module.exports = (socket, globalData) => {
         userTarget.socket.emit('kicked');
         userTarget.socket.room = null;
         socket.room.removeUser(req.username);
-        socket.emit('kick user:response', {success: true, response: socket.room.toResult()});
+        socket.emit('kick user:response', {code: req.code, success: true, response: socket.room.toResult()});
+        utils.sendAllRoom(globalData);
+        console.log("[Kick User] User admin " + socket.user.userName + " from the room " + socket.room.name + " kicked the user " + userTarget.userName + ".");
       } else {
-        socket.emit('kick user:response', {success: false, response: 'No user found.'});
+        socket.emit('kick user:response', {code: req.code, success: false, response: 'No user found.'});
+        console.error("[Kick User] User admin " + socket.user.userName + " from the room " + socket.room.name + " want to kick the user " + req.username + " but he was not found.");
       }
     } else {
-      socket.emit('kick user:response', {success: false, response: 'You do not have enough right.'});
+      socket.emit('kick user:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
+      console.error("[Kick User] User " + socket.id + " does not have enough rights to kick a player.");
     }
   });
 
@@ -67,12 +75,16 @@ module.exports = (socket, globalData) => {
         userTarget.socket.emit('delegated', socket.room.toResult());
         userTarget.socket.user.admin = true;
         socket.user.admin = false;
-        socket.emit('delegate role:response', {success: true, response: socket.room.toResult()});
+        socket.emit('delegate role:response', {code: req.code, success: true, response: socket.room.toResult()});
+        utils.sendAllRoom(globalData);
+        console.log("[Delegate Role] User " + socket.user.userName + " delegate his admin role to " + userTarget.userName + " in the room " + socket.room.name + ".");
       } else {
-        socket.emit('delegate user:response', {success: false, response: 'No user found.'});
+        socket.emit('delegate user:response', {code: req.code, success: false, response: 'No user found.'});
+        console.error("[Delegate Role] User " + socket.user.userName + " cannot delegate his role to a user '" + req.username + "' who is not inside the room " + socket.room.name + ".");
       }
     } else {
-      socket.emit('delegate user:response', {success: false, response: 'You do not have enough right.'});
+      socket.emit('delegate user:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
+      console.error("[Delegate User] User " + socket.id + " does not have enough rights to delegate his role.");
     }
   });
 

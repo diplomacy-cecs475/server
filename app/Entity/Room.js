@@ -182,6 +182,12 @@ class Room {
     this._users.forEach(function (user) {
       users.push(user.toResult())
     });
+    let adminUser = this.getAdminUser();
+    if (adminUser) {
+      adminUser = adminUser.toResult();
+    } else {
+      adminUser = null;
+    }
 
     return {
       name: this._name,
@@ -189,7 +195,7 @@ class Room {
       roundNumber: this._roundNumber,
       started: this._started,
       nbUsersMax: this._nbUsersMax,
-      admin: this.getAdminUser().toResult(),
+      admin: adminUser,
       public: this._public,
       timer: this._timer,
       users: users,

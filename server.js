@@ -29,7 +29,7 @@ var globalData = {
 
 io.use((socket, next) => {
   if (socket.request.headers.cookie) {
-    console.log('COOKIES exists :' + socket.request.headers.cookie);
+    //console.log('COOKIES exists :' + socket.request.headers.cookie);
     return next();
   }
   console.log('COOKIES NOT exists');

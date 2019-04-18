@@ -1,4 +1,3 @@
-
 module.exports = (socket, globalData) => {
   socket.user = null;
   socket.room = null;
@@ -9,4 +8,4 @@ module.exports = (socket, globalData) => {
   require('./Events/roomEvents')(socket, globalData);
   // Msg events:
   require('./Events/messageEvents')(socket, globalData);
-}
+};

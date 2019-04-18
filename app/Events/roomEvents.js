@@ -1,4 +1,5 @@
 const Room = require('../Entity/Room');
+let utils = require('../Tools/utils');
 
 module.exports = (socket, globalData) => {
 
@@ -7,7 +8,6 @@ module.exports = (socket, globalData) => {
     if (socket.user) {
       if (!socket.room) {
         socket.user.admin = true;
-
         socket.room = new Room(req.name);
         socket.room.addUser(socket.user);
         socket.room.public = req.publicVisibility;
@@ -16,13 +16,16 @@ module.exports = (socket, globalData) => {
         socket.room.nbUsersMax = req.nbUsersMax;
 
         globalData.roomList.push(socket.room);
-        socket.emit('create room:response', {success: true, response: socket.room.toResult()});
-        console.log("User " + socket.user.userName + " created the room " + socket.room.name + " and set public to " + req.publicVisibility + " with token " + socket.room.tokenId + ".");
+        socket.emit('create room:response', {code: req.code, success: true, response: socket.room.toResult()});
+        utils.sendAllRoom(globalData);
+        console.log("[Create Room] User " + socket.user.userName + " created the room " + socket.room.name + " and set public to " + req.publicVisibility + " with token " + socket.room.tokenId + ".");
       } else {
-        socket.emit('create room:response', {success: false, response: 'You are already in a room.'});
+        socket.emit('create room:response', {code: req.code, success: false, response: 'You are already in a room.'});
+        console.error("[Create Room] User " + socket.user.userName + " is already in the room " + socket.room.name + ".");
       }
     } else {
-      socket.emit('create room:response', {success: false, response: 'You are not logged in.'});
+      socket.emit('create room:response', {code: req.code, success: false, response: 'You are not logged in.'});
+      console.error("[Create Room] User " + socket.id + " did not command 'add user'.");
     }
   });
 
@@ -36,55 +39,69 @@ module.exports = (socket, globalData) => {
         try {
           room.addUser(socket.user);
           socket.room = room;
-          socket.emit('join room:response', {success: true, response: socket.room.toResult()});
-          console.log("User " + socket.user.userName + " joined the room " + socket.room.name + ".");
+          socket.emit('join room:response', {code: req.code, success: true, response: socket.room.toResult()});
+          utils.sendAllRoom(globalData);
+          console.log("[Join Room] User " + socket.user.userName + " joined the room " + socket.room.name + ".");
         }
         catch (e) {
-          console.log(e);
-          socket.emit('join room:response', {success: false, response: e});
+          socket.emit('join room:response', {code: req.code, success: false, response: e});
+          console.error("[Join Room] User " + socket.user.userName + "wants to join the room " + room.name + " but fails because: " + e);
         }
       } else if (!room) {
-        console.log("Room " + req.token + " does not exists");
-        console.log(globalData.roomList);
-        socket.emit('join room:response', {success: false, response: 'Room ' + req.token + ' does not exists.'});
+        socket.emit('join room:response', {code: req.code, success: false, response: 'Room ' + req.token + ' does not exists.'});
+        console.error("[Join Room] User " + socket.user.userName + " tried to enter in the room " + req.token + " but the room does not exists.");
       } else {
-        socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
+        socket.emit('join room:response', {code: req.code, success: false, response: 'Bad password or room already started.'});
+        console.error("[Join Room] User " + socket.user.userName + " tried to enter in the room " + req.token + " but the password does not match or the room has already started.");
       }
-    } else {
-      socket.emit('join room:response', {success: false, response: 'You are already in a room or not logged in.'});
+    } else if (!socket.user) {
+      socket.emit('join room:response', {code: req.code, success: false, response: "You are not logged in or not in a room."});
+      console.error("[Join room] User " + socket.id + " did not command 'add user'.");
+    } else if (socket.room) {
+      socket.emit('join room:response', {code: req.code, success: false, response: "You are already in a room."});
+      console.error("[Join room] User " + socket.user.userName + " is already in the room " + socket.room.name + ".");
     }
   });
 
   // Create Room
-  socket.on('list room', () => {
+  socket.on('list room', (req) => {
     let roomList = [];
     globalData.roomList.forEach(function (room) {
       roomList.push(room.toResult());
     });
-    socket.emit('list room:response', {success: true, response: roomList});
+    socket.emit('list room:response', {code: req.code, success: true, response: roomList});
+    console.log("[List Room] Socket " + socket.id + " asked for the list of room.");
   });
 
   // Leave room
-  socket.on('leave room', () => {
+  socket.on('leave room', (req) => {
     if (socket.user && socket.room) {
+      console.log("[Leave room] User " + socket.user.userName + " left the room " + socket.room.name + ".");
       socket.room.removeUser(socket.user);
       socket.room = null;
       socket.user.admin = false;
-      socket.emit('leave room:response', {success: true, response: "You were removed."});
-    } else {
-      socket.emit('leave room:response', {success: false, response: "You are not logged in or not in a room."});
+      socket.emit('leave room:response', {code: req.code, success: true, response: "You were removed."});
+      utils.sendAllRoom(globalData);
+    } else if (!socket.user) {
+      socket.emit('leave room:response', {code: req.code, success: false, response: "You are not logged in or not in a room."});
+      console.error("[Leave room] User " + socket.id + " did not command 'add user'.");
+    } else if (!socket.room) {
+      socket.emit('leave room:response', {code: req.code, success: false, response: "You are not in a room."});
+      console.error("[Leave room] User " + socket.user.userName + " is not on a room.");
     }
   });
 
   // Get special Room
   socket.on('get room', (req) => {
     let room = globalData.roomList.find((roomFind) => {
-      return roomFind.tokenId === req.tokenId;
+      return roomFind.tokenId === req.token;
     });
-    if (room === null) {
-      socket.emit('get room:response', {success: false, response: 'Room not found.'});
+    if (!room) {
+      socket.emit('get room:response', {code: req.code, success: false, response: 'Room not found.'});
+      console.error("[Get Room] Room with id " + req.token + " does not exists.");
     } else {
-      socket.emit('get room:response', {success: true, response: room.toResult()});
+      socket.emit('get room:response', {code: req.code, success: true, response: room.toResult()});
+      console.log("[Get Room] Send the room id:" + req.token + " " + room.toResult());
     }
   });
 
