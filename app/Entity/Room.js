@@ -154,6 +154,9 @@ class Room {
     if (this._users.length >= this._nbUsersMax) {
       throw "Too many user in this room.";
     }
+    if (this.nameChecker(user)) {
+      throw "Username is already taken";
+    }
     this._users.push(user);
   }
 
@@ -165,6 +168,12 @@ class Room {
     if (userIdx !== -1) {
       this._users.splice(userIdx, 1);
     }
+  }
+  nameChecker(user) {
+    var checker = false;
+    for (var i = 0; i < this._users.length; i++) {
+      checker = (user._userName == this._users[i]._userName);
+    return checker;
   }
 
   /**
@@ -188,6 +197,7 @@ class Room {
     } else {
       adminUser = null;
     }
+
 
     return {
       name: this._name,
