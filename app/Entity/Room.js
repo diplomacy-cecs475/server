@@ -169,12 +169,6 @@ class Room {
       this._users.splice(userIdx, 1);
     }
   }
-  nameChecker(user) {
-    var checker = false;
-    for (var i = 0; i < this._users.length; i++) {
-      checker = (user._userName == this._users[i]._userName);
-    return checker;
-  }
 
   /**
    * Get the user admin.
@@ -212,6 +206,5 @@ class Room {
     };
   }
 }
-
 
 module.exports = Room;
