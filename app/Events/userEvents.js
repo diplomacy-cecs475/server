@@ -65,29 +65,6 @@ module.exports = (socket, globalData) => {
     }
   });
 
-  // If admin, can delegate the role to another player.
-  socket.on('delegate role', (req) => {
-    if (socket.user && socket.room && socket.user.admin) {
-      let userTarget = socket.room.users.find(function (user) {
-        return user.username === req.username;
-      });
-      if (userTarget) {
-        userTarget.socket.emit('delegated', socket.room.toResult());
-        userTarget.socket.user.admin = true;
-        socket.user.admin = false;
-        socket.emit('delegate role:response', {code: req.code, success: true, response: socket.room.toResult()});
-        utils.sendAllRoom(globalData);
-        console.log("[Delegate Role] User " + socket.user.userName + " delegate his admin role to " + userTarget.userName + " in the room " + socket.room.name + ".");
-      } else {
-        socket.emit('delegate user:response', {code: req.code, success: false, response: 'No user found.'});
-        console.error("[Delegate Role] User " + socket.user.userName + " cannot delegate his role to a user '" + req.username + "' who is not inside the room " + socket.room.name + ".");
-      }
-    } else {
-      socket.emit('delegate user:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
-      console.error("[Delegate User] User " + socket.id + " does not have enough rights to delegate his role.");
-    }
-  });
-
   // Client disconnect
   socket.on('disconnect', () => {
     /*

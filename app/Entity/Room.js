@@ -161,11 +161,21 @@ class Room {
   }
 
   removeUser(user) {
+    let userNext = this._users.find(function (userObj) {
+      return userObj !== user;
+    });
+
     let userIdx = this._users.findIndex((obj) => {
       return obj.userName === user;
     });
 
     if (userIdx !== -1) {
+      if (user.admin) {
+        if (userNext) {
+          userNext.socket.emit('delegated', socket.room.toResult());
+          userNext.socket.user.admin = true;
+        }
+      }
       this._users.splice(userIdx, 1);
     }
   }
@@ -186,12 +196,6 @@ class Room {
       users.push(user.toResult())
     });
     let adminUser = this.getAdminUser();
-    if (adminUser) {
-      adminUser = adminUser.toResult();
-    } else {
-      adminUser = null;
-    }
-
 
     return {
       name: this._name,
@@ -199,7 +203,7 @@ class Room {
       roundNumber: this._roundNumber,
       started: this._started,
       nbUsersMax: this._nbUsersMax,
-      admin: adminUser,
+      admin: (adminUser) ? adminUser.toResult() : null,
       public: this._public,
       timer: this._timer,
       users: users,

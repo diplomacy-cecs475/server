@@ -76,11 +76,20 @@ module.exports = (socket, globalData) => {
   // Leave room
   socket.on('leave room', (req) => {
     if (socket.user && socket.room) {
+      let currentRoom = socket.room;
       console.log("[Leave room] User " + socket.user.userName + " left the room " + socket.room.name + ".");
       socket.room.removeUser(socket.user);
       socket.room = null;
       socket.user.admin = false;
       socket.emit('leave room:response', {code: req.code, success: true, response: "You were removed."});
+      if (currentRoom.users.length === 0) {
+        let roomIdx = globalData.roomList.findIndex((obj) => {
+          return obj === currentRoom;
+        });
+        if (roomIdx !== -1) {
+          globalData.roomList.splice(roomIdx, 1);
+        }
+      }
       utils.sendAllRoom(globalData);
     } else if (!socket.user) {
       socket.emit('leave room:response', {code: req.code, success: false, response: "You are not logged in or not in a room."});
@@ -105,4 +114,26 @@ module.exports = (socket, globalData) => {
     }
   });
 
+  // If admin, can delegate the role to another player.
+  socket.on('delegate role', (req) => {
+    if (socket.user && socket.room && socket.user.admin) {
+      let userTarget = socket.room.users.find(function (user) {
+        return user.username === req.username;
+      });
+      if (userTarget) {
+        userTarget.socket.emit('delegated', socket.room.toResult());
+        userTarget.socket.user.admin = true;
+        socket.user.admin = false;
+        socket.emit('delegate role:response', {code: req.code, success: true, response: socket.room.toResult()});
+        utils.sendAllRoom(globalData);
+        console.log("[Delegate Role] User " + socket.user.userName + " delegate his admin role to " + userTarget.userName + " in the room " + socket.room.name + ".");
+      } else {
+        socket.emit('delegate user:response', {code: req.code, success: false, response: 'No user found.'});
+        console.error("[Delegate Role] User " + socket.user.userName + " cannot delegate his role to a user '" + req.username + "' who is not inside the room " + socket.room.name + ".");
+      }
+    } else {
+      socket.emit('delegate user:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
+      console.error("[Delegate User] User " + socket.id + " does not have enough rights to delegate his role.");
+    }
+  });
 };
