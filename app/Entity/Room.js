@@ -1,5 +1,6 @@
 const MAX_USER_PER_ROOM = 7;
 const LENGTH_TOKEN = 5;
+const Map = require('../Entity/Map');
 
 /**
  * Room object.
@@ -9,7 +10,7 @@ class Room {
     this._tokenId = Room.generateTokenId();
     this._users = [];
     this._nbUsersMax = MAX_USER_PER_ROOM;
-    this._map = [];
+    this._map = null;
     this._public = true;
     this._password = null;
     this._roundNumber = 0;
@@ -39,6 +40,11 @@ class Room {
    */
   get roundNumber() {
     return this._roundNumber;
+  }
+
+  startGame() {
+    this._started = true;
+    this._map = new Map();
   }
 
   /**
@@ -154,9 +160,6 @@ class Room {
     if (this._users.length >= this._nbUsersMax) {
       throw "Too many user in this room.";
     }
-    if (this.nameChecker(user)) {
-      throw "Username is already taken";
-    }
     this._users.push(user);
   }
 
@@ -166,7 +169,7 @@ class Room {
     });
 
     let userIdx = this._users.findIndex((obj) => {
-      return obj.userName === user;
+      return obj.userName === user.userName;
     });
 
     if (userIdx !== -1) {
@@ -206,6 +209,7 @@ class Room {
       admin: (adminUser) ? adminUser.toResult() : null,
       public: this._public,
       timer: this._timer,
+      map: this._map ? this._map.toResult() : null,
       users: users,
     };
   }

@@ -83,6 +83,7 @@ module.exports = (socket, globalData) => {
       socket.user.admin = false;
       socket.emit('leave room:response', {code: req.code, success: true, response: "You were removed."});
       if (currentRoom.users.length === 0) {
+        console.log("[Leave room] After " + socket.user.userName + " left the game, we must remove the room " + currentRoom.name + " because there is no more user inside.");
         let roomIdx = globalData.roomList.findIndex((obj) => {
           return obj === currentRoom;
         });
@@ -134,6 +135,24 @@ module.exports = (socket, globalData) => {
     } else {
       socket.emit('delegate user:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
       console.error("[Delegate User] User " + socket.id + " does not have enough rights to delegate his role.");
+    }
+  });
+
+  // If admin, can delegate the role to another player.
+  socket.on('start game', (req) => {
+    if (socket.user && socket.room && socket.user.admin) {
+      if (socket.room.users.length >= 2) {
+        socket.room.start();
+        utils.sendAllRoom(globalData);
+        socket.emit('start game:response', {code: req.code, success: true, response: this.room.toResult()});
+        console.log("[Start Game] User " + socket.user.userName + " starts the game of the room " + socket.room.name);
+      } else {
+        socket.emit('start game:response', {code: req.code, success: false, response: 'Not enough users.'});
+        console.error("[Start Game] Room " + socket.room.name + " cannot start because of the number of user.");
+      }
+    } else {
+      socket.emit('start game:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
+      console.error("[Start Game] User " + socket.id + " does not have enough rights to start the game.");
     }
   });
 };
