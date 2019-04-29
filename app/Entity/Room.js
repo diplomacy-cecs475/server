@@ -1,6 +1,6 @@
 const MAX_USER_PER_ROOM = 7;
 const LENGTH_TOKEN = 5;
-const Map = require('../Entity/Map');
+const MapGame = require('./MapGame');
 
 /**
  * Room object.
@@ -23,10 +23,6 @@ class Room {
     return this._started;
   }
 
-  start() {
-    this._started = true;
-  }
-
   /**
    * Add a round number.
    */
@@ -44,7 +40,7 @@ class Room {
 
   startGame() {
     this._started = true;
-    this._map = new Map();
+    this._map = new MapGame();
   }
 
   /**

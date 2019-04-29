@@ -1,9 +1,9 @@
-export const placeTypeEnum = {
+const placeTypeEnum = {
   TERRITORY: 1,
   WATER: 2,
 };
 
-export const placeList = [
+const placeList = [
   {key: 'Boh', country: 'Austria', fullName: 'Bohemia', type: placeTypeEnum.TERRITORY},
   {key: 'Bud', country: 'Austria', fullName: 'Budapest', type: placeTypeEnum.TERRITORY},
   {key: 'Gal', country: 'Austria', fullName: 'Galicia', type: placeTypeEnum.TERRITORY},
@@ -89,12 +89,15 @@ export const placeList = [
   {key: 'Wes', fullName: 'Western Mediterranean', type: placeTypeEnum.WATER},
 ];
 
-export const startingPosition = [
-  {country: 'Austria', city: ['Vie', 'Bud', 'Tri']},
-  {country: 'England', city: ['Lon', 'Edi', 'Lvp']},
-  {country: 'France', city: ['Par', 'Mar', 'Bre']},
-  {country: 'Germany', city: ['Ber', 'Mun', 'Kie']},
-  {country: 'Italy', city: ['Rom', 'Ven', 'Nap']},
-  {country: 'Russia', city: ['Mos', 'Sev', 'War', 'StP']},
-  {country: 'Turkey', city: ['Ank', 'Con', 'Smy']},
-];
+module.exports = {
+  placeList: placeList,
+  startingPosition: [
+    {country: 'Austria', city: ['Vie', 'Bud', 'Tri']},
+    {country: 'England', city: ['Lon', 'Edi', 'Lvp']},
+    {country: 'France', city: ['Par', 'Mar', 'Bre']},
+    {country: 'Germany', city: ['Ber', 'Mun', 'Kie']},
+    {country: 'Italy', city: ['Rom', 'Ven', 'Nap']},
+    {country: 'Russia', city: ['Mos', 'Sev', 'War', 'StP']},
+    {country: 'Turkey', city: ['Ank', 'Con', 'Smy']},
+  ]
+};

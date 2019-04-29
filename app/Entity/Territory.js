@@ -36,3 +36,5 @@ class Territory {
     };
   }
 }
+
+module.exports = Territory;

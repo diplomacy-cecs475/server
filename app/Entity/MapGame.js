@@ -1,13 +1,14 @@
 const {placeList, startingPosition} = require("./PlaceConstant");
+const Territory = require("./Territory");
 
 /**
- * Map object.
+ * MapGame object.
  */
-class Map {
+class MapGame {
   constructor() {
     this._territotyList = [];
     placeList.forEach((place) => {
-      this._territotyList.add(new Territory(place.key, place.fullName, place.country, place.type));
+      this._territotyList.push(new Territory(place.key, place.fullName, place.country, place.type));
     });
   }
 
@@ -18,10 +19,12 @@ class Map {
   toResult() {
     let territories = [];
     this._territotyList.forEach((territory) => {
-      territories.add(territory.toResult());
+      territories.push(territory.toResult());
     });
     return {
       map: territories
     }
   }
 }
+
+module.exports = MapGame;

@@ -142,9 +142,10 @@ module.exports = (socket, globalData) => {
   socket.on('start game', (req) => {
     if (socket.user && socket.room && socket.user.admin) {
       if (socket.room.users.length >= 2) {
-        socket.room.start();
+        socket.room.startGame();
         utils.sendAllRoom(globalData);
-        socket.emit('start game:response', {code: req.code, success: true, response: this.room.toResult()});
+        utils.startGameRoomEvent(socket.room);
+        socket.emit('start game:response', {code: req.code, success: true, response: socket.room.toResult()});
         console.log("[Start Game] User " + socket.user.userName + " starts the game of the room " + socket.room.name);
       } else {
         socket.emit('start game:response', {code: req.code, success: false, response: 'Not enough users.'});
