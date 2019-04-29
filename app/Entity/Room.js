@@ -40,7 +40,7 @@ class Room {
 
   startGame() {
     this._started = true;
-    this._map = new MapGame();
+    this._map = new MapGame(this._users);
   }
 
   /**

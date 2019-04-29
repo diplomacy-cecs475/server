@@ -8,6 +8,18 @@ class Territory {
     this._units = {army: false, fleet:false};
   }
 
+  get key() {
+    return this._key;
+  }
+
+  get user() {
+    return this._user;
+  }
+
+  set user(pUser) {
+    this._user = pUser;
+  }
+
   get units() {
     return this._units;
   }
