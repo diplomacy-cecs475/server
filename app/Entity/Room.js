@@ -171,7 +171,7 @@ class Room {
     if (userIdx !== -1) {
       if (user.admin) {
         if (userNext) {
-          userNext.socket.emit('delegated', socket.room.toResult());
+          userNext.socket.emit('delegated', userNext.socket.room.toResult());
           userNext.socket.user.admin = true;
         }
       }
