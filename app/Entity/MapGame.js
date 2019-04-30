@@ -43,6 +43,15 @@ class MapGame {
     return this._territotyList;
   }
 
+  removeFleetOrArmy(territory) {
+    if (territory.type === TERRITORY) {
+      territory.army = false;
+    }
+    else if (territory.type === WATER) {
+      territory.fleet = false;
+    }
+  }
+
   toResult() {
     let territories = [];
     this._territotyList.forEach((territory) => {
