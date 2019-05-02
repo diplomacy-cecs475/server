@@ -76,6 +76,14 @@ class Room {
   }
 
   /**
+   * Get the map game.
+   * @returns {MapGame}
+   */
+  get map() {
+    return this._map;
+  }
+
+  /**
    * Get the visibility, public or private room.
    * @returns {boolean}
    */

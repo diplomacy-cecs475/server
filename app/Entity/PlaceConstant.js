@@ -60,7 +60,7 @@ const placeList = [
   {key: 'Gre', country: 'Greece', fullName: 'Greece', type: placeTypeEnum.TERRITORY},
   {key: 'Hol', country: 'Holland', fullName: 'Holland', type: placeTypeEnum.TERRITORY},
   {key: 'Nwy', country: 'Norway', fullName: 'Norway', type: placeTypeEnum.TERRITORY},
-  {key: 'NAf', country: 'North Africa', fullName: 'North Africa', type: placeTypeEnum.TERRITORY},
+  {key: 'NAf', country: 'ƒ', fullName: 'North Africa', type: placeTypeEnum.TERRITORY},
   {key: 'Por', country: 'Portugal', fullName: 'Portugal', type: placeTypeEnum.TERRITORY},
   {key: 'Rum', country: 'Rumania', fullName: 'Rumania', type: placeTypeEnum.TERRITORY},
   {key: 'Ser', country: 'Servia', fullName: 'Servia', type: placeTypeEnum.TERRITORY},
@@ -92,12 +92,12 @@ const placeList = [
 module.exports = {
   placeList: placeList,
   startingPosition: [
-    {country: 'Austria', city: ['Vie', 'Bud', 'Tri']},
-    {country: 'England', city: ['Lon', 'Edi', 'Lvp']},
-    {country: 'France', city: ['Par', 'Mar', 'Bre']},
-    {country: 'Germany', city: ['Ber', 'Mun', 'Kie']},
-    {country: 'Italy', city: ['Rom', 'Ven', 'Nap']},
-    {country: 'Russia', city: ['Mos', 'Sev', 'War', 'StP']},
-    {country: 'Turkey', city: ['Ank', 'Con', 'Smy']},
+    {country: 'Austria', city: [{key: 'Vie', army: true, fleet: false}, {key: 'Bud', army: true, fleet: false}, {key: 'Tri', army: false, fleet: true}]},
+    {country: 'England', city: [{key: 'Lon', army: false, fleet: true}, {key: 'Edi', army: false, fleet: true}, {key: 'Lvp', army: true, fleet: false}]},
+    {country: 'France', city: [{key: 'Par', army: true, fleet: false}, {key: 'Mar', army: true, fleet: false}, {key: 'Bre', army: false, fleet: true}]},
+    {country: 'Germany', city: [{key: 'Ber', army: true, fleet: false}, {key: 'Mun', army: true, fleet: false}, {key: 'Kie', army: false, fleet: true}]},
+    {country: 'Italy', city: [{key: 'Rom', army: true, fleet: false}, {key: 'Ven', army: true, fleet: false}, {key: 'Nap', army: false, fleet: true}]},
+    {country: 'Russia', city: [{key: 'Mos', army: true, fleet: false}, {key: 'Sev', army: false, fleet: true}, {key: 'War', army: true, fleet: false}, {key: 'StP', army: false, fleet: true}]},
+    {country: 'Turkey', city: [{key: 'Ank', army: false, fleet: true}, {key: 'Con', army: true, fleet: false}, {key: 'Smy', army: true, fleet: false}]},
   ]
 };

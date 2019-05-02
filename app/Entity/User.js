@@ -10,6 +10,7 @@ class User {
     this._socket = socket;
     this._tokenId = User.generateTokenId();
     this._country = null;
+    this._orders = null;
   }
 
   /**
@@ -50,6 +51,23 @@ class User {
    */
   set country(pCountry) {
     this._country = pCountry;
+  }
+
+
+  /**
+   * Get the orders.
+   * @returns {array}
+   */
+  get orders() {
+    return this._orders;
+  }
+
+  /**
+   * Set the orders.
+   * @param pOrders
+   */
+  set orders(pOrders) {
+    this._orders = pOrders;
   }
 
   /**
@@ -98,7 +116,8 @@ class User {
       username: this._userName,
       admin: this._admin,
       tokenId: this._tokenId,
-      country: this._country
+      country: this._country,
+      orders: this._orders !== null
     };
   }
 }

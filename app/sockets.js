@@ -8,4 +8,6 @@ module.exports = (socket, globalData) => {
   require('./Events/roomEvents')(socket, globalData);
   // Msg events:
   require('./Events/messageEvents')(socket, globalData);
+  // Game events:
+  require('./Events/gameEvents')(socket, globalData);
 };

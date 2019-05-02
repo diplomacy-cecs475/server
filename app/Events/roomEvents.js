@@ -137,23 +137,4 @@ module.exports = (socket, globalData) => {
       console.error("[Delegate User] User " + socket.id + " does not have enough rights to delegate his role.");
     }
   });
-
-  // If admin, can delegate the role to another player.
-  socket.on('start game', (req) => {
-    if (socket.user && socket.room && socket.user.admin) {
-      if (socket.room.users.length >= 2) {
-        socket.room.startGame();
-        utils.sendAllRoom(globalData);
-        utils.startGameRoomEvent(socket.room);
-        socket.emit('start game:response', {code: req.code, success: true, response: socket.room.toResult()});
-        console.log("[Start Game] User " + socket.user.userName + " starts the game of the room " + socket.room.name);
-      } else {
-        socket.emit('start game:response', {code: req.code, success: false, response: 'Not enough users.'});
-        console.error("[Start Game] Room " + socket.room.name + " cannot start because of the number of user.");
-      }
-    } else {
-      socket.emit('start game:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
-      console.error("[Start Game] User " + socket.id + " does not have enough rights to start the game.");
-    }
-  });
 };

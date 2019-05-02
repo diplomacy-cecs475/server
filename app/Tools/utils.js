@@ -17,5 +17,22 @@ module.exports = {
     room.users.forEach(function (user) {
       user.socket.emit('start game:event', room.toResult());
     });
+  },
+
+  ordersSentEvent(room) {
+    let userList = [];
+    room.users.forEach(function (user) {
+      userList.push(user.toResult());
+    });
+
+    room.users.forEach(function (user) {
+      user.socket.emit('orders sent:event', userList);
+    });
+  },
+
+  roundEvent(room) {
+    room.users.forEach(function (user) {
+      user.socket.emit('round:event', room.toResult());
+    });
   }
 };

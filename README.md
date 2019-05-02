@@ -41,6 +41,7 @@ userTarget.socket.emit('kicked');
 socket.emit('kick user:response', {success: true, response: socket.room.toResult()});
 socket.emit('kick user:response', {success: false, response: 'No user found.'});
 socket.emit('kick user:response', {success: false, response: 'You do not have enough right.'});
+this.sendAll(globalData, 'update room:event', roomList);
 ```
 
 **delegate role 'username'**
@@ -51,6 +52,7 @@ socket.emit('kick user:response', {success: false, response: 'You do not have en
 socket.emit('delegate role:response', {success: true, response: socket.room.toResult()});
 socket.emit('delegate user:response', {success: false, response: 'No user found.'});
 socket.emit('delegate user:response', {success: false, response: 'You do not have enough right.'});
+this.sendAll(globalData, 'update room:event', roomList);
 ```
 
 **disconnect**
@@ -67,6 +69,7 @@ socket.emit('delegate user:response', {success: false, response: 'You do not hav
 socket.emit('create room:response', {success: true, response: socket.room.toResult()});
 socket.emit('create room:response', {success: false, response: 'You are already in a room.'});
 socket.emit('create room:response', {success: false, response: 'You are not logged in.'});
+this.sendAll(globalData, 'update room:event', roomList);
 ```
 
 **join room ‘token’ ‘password’**
@@ -78,6 +81,8 @@ socket.emit('create room:response', {success: false, response: 'You are not logg
 socket.emit('join room:response', {success: true, response: socket.room.toResult()});
 socket.emit('join room:response', {success: false, response: 'Room ' + token + ' does not exists.'});
 socket.emit('join room:response', {success: false, response: 'Bad password or room already started.'});
+this.sendAll(globalData, 'update room:event', roomList);
+
 ```
 
 **leave room**
@@ -85,6 +90,7 @@ socket.emit('join room:response', {success: false, response: 'Bad password or ro
 ```js
 socket.emit('leave room:response', {success: true, response: "You were removed."});
 socket.emit('leave room:response', {success: false, response: "You are not logged in or not in a room."});
+this.sendAll(globalData, 'update room:event', roomList);
 ```
 
 **list room**
@@ -118,6 +124,25 @@ userTarget.socket.emit('msgPriv', {userFrom: socket.user.userName, msg: msg});
 
 ```js
 user.socket.emit('msgGlobal', {userFrom: socket.user.userName, msg: msg});
+```
+
+**start game**
+
+```js
+socket.emit('start game:response', {code: req.code, success: true, response: socket.room.toResult()});
+socket.emit('start game:response', {code: req.code, success: false, response: 'Not enough users.'});
+socket.emit('start game:response', {code: req.code, success: false, response: 'You do not have enough rights.'});
+user.socket.emit('start game:event', room.toResult()); // All users inside the room.
+```
+
+**send orders 'orders'**
+
+- Orders: [{from: key, to: key, type: convoy/attack/support}, {...}]
+
+```js
+socket.emit('send orders:response', {code: req.code, success: true, response: 'Orders saved.'});
+socket.emit('send orders:response', {code: req.code, success: false, response: 'Room or user not ready to send orders.'});
+user.socket.emit('orders sent:event', userList); // All users inside the room.
 ```
 
 ## Authors
