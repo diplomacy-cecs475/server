@@ -27,15 +27,6 @@ var globalData = {
   nbUsers: 0
 };
 
-io.use((socket, next) => {
-  if (socket.request.headers.cookie) {
-    //console.log('COOKIES exists :' + socket.request.headers.cookie);
-    return next();
-  }
-  console.log('COOKIES NOT exists');
-  next(new Error('Authentication error'));
-});
-
 io.on('connection', (socket) => {
   // Socket events
   require('./app/sockets')(socket, globalData);
