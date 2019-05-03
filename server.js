@@ -14,6 +14,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/static', express.static(__dirname + '/build/static'));
+app.use('/images', express.static(__dirname + '/build/images'));
 
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/build/index.html');
