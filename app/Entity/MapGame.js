@@ -14,6 +14,9 @@ class MapGame {
     this.giveTerritoryToUsers(users);
   }
 
+  /**
+   * Randomly assigns territories to users
+   */
   giveTerritoryToUsers() {
     let myStartingPosition = startingPosition.slice(0);
 
@@ -29,7 +32,13 @@ class MapGame {
       });
     });
   }
-
+  /**
+   * Sets Users to territories
+   * @param {any} territoryKey Identifier for the territory
+   * @param {any} user the user that is going to control the territory
+   * @param {any} army assign an army to territory if land
+   * @param {any} fleet assign a fleet to territory if naval
+   */
   setUserToTerritory(territoryKey, user, army, fleet) {
     this._territotyList.forEach((territory) => {
       if (territory.key === territoryKey) {
@@ -39,7 +48,10 @@ class MapGame {
       }
     });
   }
-
+  /**
+   * returns territory info
+   * @param {any} territoryKey identifier for territory
+   */
   getTerritoryInfo(territoryKey) {
     return this._territotyList.find((territory) => {
       if (territory.key === territoryKey) {
@@ -47,7 +59,9 @@ class MapGame {
       }
     });
   }
-
+  /**
+   * the game engine used to process orders from users
+   */
   executeOrders() {
     this._users.forEach((user) => {
       if (user.orders !== null) {
@@ -89,11 +103,15 @@ class MapGame {
       }
     });
   }
-
+  /**
+   *returns list of territories
+   */
   get territoties() {
     return this._territotyList;
   }
-
+  /**
+   * creates and adds territories to list
+   */
   toResult() {
     let territories = [];
     this._territotyList.forEach((territory) => {
